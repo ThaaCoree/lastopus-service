@@ -34,5 +34,6 @@ client.on('messageCreate', async (message) => {
   }
 });
 
+console.log("TOKEN RAW:", JSON.stringify(process.env.DISCORD_TOKEN));
 console.log("TOKEN LENGTH:", process.env.DISCORD_TOKEN?.length);
 client.login('process.env.DISCORD_TOKEN');
