@@ -17,13 +17,13 @@ client.on('messageCreate', async (message) => {
     const username = message.author.username;
     const roles = message.member?.roles.cache.map(r => r.name); // ['Admin', 'Member', ...]
     const args = message.content.split(' ');
-    const message = args[1];
+    const messageContent = args[1];
 
     try {
       const res = await fetch('https://lastopus-discord-service-production.up.railway.app/equip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roles, message }) // ส่งไปกับ request ด้วยได้
+        body: JSON.stringify({ roles, message: messageContent }) // ส่งไปกับ request ด้วยได้
       });
     
       const data = await res.text();
