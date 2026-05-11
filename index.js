@@ -20,7 +20,7 @@ client.on('messageCreate', async (message) => {
         method: 'POST'
       });
 
-      const data = await res.json();
+      const data = await res.text();
 
       message.reply(`Damage = ${data}`);
     } catch (err) {
