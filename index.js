@@ -11,17 +11,16 @@ const client = new Client({
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
 
-  if (message.content.startsWith('!dmg')) {
+  if (message.content.startsWith('!equip')) {
 
     const args = message.content.split(' ');
-    const atk = parseInt(args[1]);
-    const def = parseInt(args[2]);
+    const equip_name = (args[1]);
 
     try {
-      const res = await fetch('https://lastopus-discord-service-production.up.railway.app/api/damage', {
+      const res = await fetch('https://lastopus-discord-service-production.up.railway.app/equip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ atk, def })
+        body: JSON.stringify({ equip_name })
       });
 
       const data = await res.json();
