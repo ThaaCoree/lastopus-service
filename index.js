@@ -16,7 +16,8 @@ client.on('messageCreate', async (message) => {
     const userId = message.author.id;
     const username = message.author.username;
     const roles = message.member?.roles.cache.map(r => r.name); // ['Admin', 'Member', ...]
-    const messageContent = message.content;
+    const args = message.content.split(' ');
+    const messageContent = args[1]; // "12345"
 
     try {
       const res = await fetch('https://lastopus-discord-service-production.up.railway.app/equip', {
