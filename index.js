@@ -10,19 +10,23 @@ const client = new Client({
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
-
-  if (message.content.startsWith('!equip')) {
-
-    const args = message.content.split(' ');
+  if (message.content.startsWith('!test')) {
+    
+    // ดึงข้อมูลผู้ส่ง
+    const userId = message.author.id;
+    const username = message.author.username;
+    const roles = message.member?.roles.cache.map(r => r.name); // ['Admin', 'Member', ...]
+    const messageContent = message.content;
 
     try {
       const res = await fetch('https://lastopus-discord-service-production.up.railway.app/equip', {
-        method: 'POST'
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role, messageContent }) // ส่งไปกับ request ด้วยได้
       });
-
+    
       const data = await res.text();
-
-      message.reply(`Damage = ${data}`);
+      message.reply(`${data}`);
     } catch (err) {
       console.error(err);
       message.reply('Error');
