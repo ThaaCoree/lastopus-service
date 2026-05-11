@@ -14,13 +14,10 @@ client.on('messageCreate', async (message) => {
   if (message.content.startsWith('!equip')) {
 
     const args = message.content.split(' ');
-    const equip_name = (args[1]);
 
     try {
       const res = await fetch('https://lastopus-discord-service-production.up.railway.app/equip', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ equip_name })
+        method: 'POST'
       });
 
       const data = await res.json();
