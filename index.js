@@ -10,7 +10,7 @@ const client = new Client({
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
-  if (message.content.startsWith('!test')) {
+  if (message.content.startsWith('!equip')) {
     
     // ดึงข้อมูลผู้ส่ง
     const userId = message.author.id;
@@ -21,6 +21,30 @@ client.on('messageCreate', async (message) => {
 
     try {
       const res = await fetch('https://lastopus-discord-service-production.up.railway.app/equip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ roles, message: messageContent }) // ส่งไปกับ request ด้วยได้
+      });
+    
+      const data = await res.text();
+      message.reply(`${data}`);
+    } catch (err) {
+      console.error(err);
+      message.reply('Error');
+    }
+  }
+
+  if (message.content.startsWith('!unequip')) {
+    
+    // ดึงข้อมูลผู้ส่ง
+    const userId = message.author.id;
+    const username = message.author.username;
+    const roles = message.member?.roles.cache.map(r => r.name); // ['Admin', 'Member', ...]
+    const args = message.content.split(' ');
+    const messageContent = args[1];
+
+    try {
+      const res = await fetch('https://lastopus-discord-service-production.up.railway.app/unequip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ roles, message: messageContent }) // ส่งไปกับ request ด้วยได้
