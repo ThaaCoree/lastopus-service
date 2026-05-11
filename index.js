@@ -22,7 +22,7 @@ client.on('messageCreate', async (message) => {
       const res = await fetch('https://lastopus-discord-service-production.up.railway.app/equip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role, messageContent }) // ส่งไปกับ request ด้วยได้
+        body: JSON.stringify({ roles, messageContent }) // ส่งไปกับ request ด้วยได้
       });
     
       const data = await res.text();
