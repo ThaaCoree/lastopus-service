@@ -10,53 +10,48 @@ const client = new Client({
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
-  if (message.content.startsWith('!equip')) {
-    
-    // ดึงข้อมูลผู้ส่ง
-    const userId = message.author.id;
-    const username = message.author.username;
-    const roles = message.member?.roles.cache.map(r => r.name); // ['Admin', 'Member', ...]
-    const args = message.content.split(' ');
-    const messageContent = args.slice(1).join(' ');
+  const BASE_URL = 'https://lastopus-discord-service-production.up.railway.app';
+  const commands = {
+  '?equip': '/equip',
+  '?unequip': '/unequip',
+  '?give': '/give',
+  '?buyrune': '/buyrune',
+};
 
-    try {
-      const res = await fetch('https://lastopus-discord-service-production.up.railway.app/equip', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roles, message: messageContent }) // ส่งไปกับ request ด้วยได้
-      });
-    
-      const data = await res.text();
-      message.reply(`${data}`);
-    } catch (err) {
-      console.error(err);
-      message.reply('Error');
-    }
+async function handleCommand(message, endpoint) {
+  const roles = message.member?.roles.cache.map(r => r.name);
+  const args = message.content.split(' ').slice(1); // ["@acheros", "banana", "30"]
+
+  const mentionedUsers = await Promise.all(
+    message.mentions.users.map(async user => {
+      const member = await message.guild.members.fetch(user.id);
+      return {
+        id: user.id,
+        username: user.username,
+        roles: member.roles.cache.map(r => r.name)
+      };
+    })
+  );
+
+  try {
+    const res = await fetch(`${BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roles, message: args.join(' '), args, mentionedUsers }) // ส่ง array ไปเลย
+    });
+    const data = await res.text();
+    message.reply(data);
+  } catch (err) {
+    console.error(err);
+    message.reply('Error');
   }
+}
 
-  if (message.content.startsWith('!unequip')) {
-    
-    // ดึงข้อมูลผู้ส่ง
-    const userId = message.author.id;
-    const username = message.author.username;
-    const roles = message.member?.roles.cache.map(r => r.name); // ['Admin', 'Member', ...]
-    const args = message.content.split(' ');
-    const messageContent = args.slice(1).join(' ');
+const command = Object.keys(commands).find(cmd => message.content.startsWith(cmd));
+if (command) {
+  handleCommand(message, commands[command]);
+}
 
-    try {
-      const res = await fetch('https://lastopus-discord-service-production.up.railway.app/unequip', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roles, message: messageContent }) // ส่งไปกับ request ด้วยได้
-      });
-    
-      const data = await res.text();
-      message.reply(`${data}`);
-    } catch (err) {
-      console.error(err);
-      message.reply('Error');
-    }
-  }
 });
 
 client.login(process.env.DISCORD_TOKEN);
