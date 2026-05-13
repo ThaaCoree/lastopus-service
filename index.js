@@ -10,7 +10,7 @@ const client = new Client({
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
-  const BASE_URL = 'https://lastopus-discord-service-36ey175no.vercel.app';
+  const BASE_URL = 'https://lastopus-discord-service.onrender.com';
   const commands = {
   '?equip': '/equip',
   '?unequip': '/unequip',
