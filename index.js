@@ -20,6 +20,7 @@ client.on('messageCreate', async (message) => {
   '?equip2': '/equip2',
   '?pay': '/pay',
   '?giverune': '/giverune',
+  '?update': '/update'
 };
 
 async function handleCommand(message, endpoint) {
