@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 
 const client = new Client({
@@ -16,6 +17,9 @@ client.on('messageCreate', async (message) => {
   '?unequip': '/unequip',
   '?give': '/give',
   '?buyrune': '/buyrune',
+  '?equip2': '/equip2',
+  '?pay': '/pay',
+  '?giverune': '/giverune',
 };
 
 async function handleCommand(message, endpoint) {
