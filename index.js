@@ -9,18 +9,49 @@ const client = new Client({
   ]
 });
 
+let enabled = true;
+
+
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
+
+  const isGM = message.member.roles.cache.some(role => role.name === "GM");
+
+  if (message.content === "?disable") {
+  if (!isGM) return;
+  enabled = false;
+  message.reply("ปิดใช้งานบอทแล้ว");
+  return;
+}
+
+if (message.content === "?enable") {
+  if (!isGM) return;
+  enabled = true;
+  message.reply("เปิดใช้งานบอทแล้ว");
+  return;
+}
+
+  if (!enabled && message.content.startsWith("?")) {
+  message.reply("บอทกำลังถูกปิดใช้งาน");
+  return;
+}
+
   const BASE_URL = 'https://lastopus-discord-service.onrender.com';
   const commands = {
   '?equip': '/equip',
   '?unequip': '/unequip',
   '?give': '/give',
   '?buyrune': '/buyrune',
-  '?equip2': '/equip2',
   '?pay': '/pay',
-  '?giverune': '/giverune',
-  '?update': '/update'
+  '?runegive': '/giverune',
+  '?update': '/update',
+  '?2equip': '/equip2',
+  '?load_database': '/load_database',
+  '?copper_coin': '/copper_coin',
+  '?passive': '/passive',
+  '?help': '/help',
+  '?disable_bot': '/disable_bot',
+  '?enable_bot': '/enable_bot',
 };
 
 async function handleCommand(message, endpoint) {
